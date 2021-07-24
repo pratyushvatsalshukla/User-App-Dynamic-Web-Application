@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
 
-@WebServlet("/addServlet")
-public class CreateUserServlet extends HttpServlet {
+@WebServlet("/updateServlet")
+public class UpdateUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection ;
        
@@ -27,9 +27,7 @@ public class CreateUserServlet extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver") ;
 			 connection = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "root", "root") ;
 			 
-		
-		} 
-		
+		} 	
 		
 		catch (SQLException e) {
 
@@ -45,8 +43,6 @@ public class CreateUserServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String firstName = request.getParameter("firstName") ;
-		String lastName = request.getParameter("lastName") ;
 		String email = request.getParameter("email") ;
 		String password = request.getParameter("password") ;
 		
@@ -54,17 +50,16 @@ public class CreateUserServlet extends HttpServlet {
 			
 			Statement statement = connection.createStatement() ;
 			
-			int result = statement.executeUpdate("insert into user values('" + firstName + "','" + lastName + "','"
-					+ email+ "','" + password +"')") ;
+			int result = statement.executeUpdate("update user set password='" + password + "' where email = '" + email + "'") ;
 			
 			PrintWriter out = response.getWriter() ;
 			if(result>0)
 			{
-				out.print("<h1> USER CREATED !! </h1>");
+				out.print("<h1> PASSWORD UPDATED </h1>");
 			}
 			else
 			{
-				out.print("<h1> ERROR CREATING USER !! </h1>") ;
+				out.print("<h1> ERROR UPDATING PASSWORD !! </h1>") ;
 			}
 			
 		} catch (SQLException e) {
